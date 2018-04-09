@@ -30,3 +30,8 @@
 *.exe
 *.out
 *.app
+xworld-dev/.vs/XWorld/v15/.suo
+*.db
+*.ipch
+*.db-shm
+*.db-wal
