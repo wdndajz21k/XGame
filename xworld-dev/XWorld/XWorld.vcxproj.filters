@@ -10,12 +10,6 @@
     <Filter Include="02.LuaGlobal">
       <UniqueIdentifier>{fbc6214e-f149-4afd-b289-37ab3f3d2359}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.UserData">
-      <UniqueIdentifier>{887c2d6f-f6d4-4989-acd1-ddfe7698f71f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04.TimeFrame">
-      <UniqueIdentifier>{bcca5d00-046d-45c1-a15b-557f2e090cb2}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -30,20 +24,8 @@
     <ClInclude Include="..\Include\XWorld\xworld.pb.h">
       <Filter>01.protobuf</Filter>
     </ClInclude>
-    <ClInclude Include="..\Include\XWorld\XWorld.h">
-      <Filter>00.WorldLib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Include\XWorld\UserData.h">
-      <Filter>03.UserData</Filter>
-    </ClInclude>
     <ClInclude Include="..\Include\XWorld\XLuaGlobal.h">
       <Filter>02.LuaGlobal</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Include\XWorld\XTimeFrame.h">
-      <Filter>04.TimeFrame</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Include\XWorld\XWorldTool.h">
-      <Filter>00.WorldLib</Filter>
     </ClInclude>
     <ClInclude Include="..\Include\XWorld\XWorldApp.h">
       <Filter>00.WorldLib</Filter>
@@ -51,9 +33,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
-      <Filter>00.WorldLib</Filter>
-    </ClCompile>
-    <ClCompile Include="XWorld.cpp">
       <Filter>00.WorldLib</Filter>
     </ClCompile>
     <ClCompile Include="xconfig.pb.cc">
@@ -65,17 +44,8 @@
     <ClCompile Include="xworld.pb.cc">
       <Filter>01.protobuf</Filter>
     </ClCompile>
-    <ClCompile Include="UserData.cpp">
-      <Filter>03.UserData</Filter>
-    </ClCompile>
     <ClCompile Include="XLuaGlobal.cpp">
       <Filter>02.LuaGlobal</Filter>
-    </ClCompile>
-    <ClCompile Include="XTimeFrame.cpp">
-      <Filter>04.TimeFrame</Filter>
-    </ClCompile>
-    <ClCompile Include="XWorldTool.cpp">
-      <Filter>00.WorldLib</Filter>
     </ClCompile>
     <ClCompile Include="XWorldApp.cpp">
       <Filter>00.WorldLib</Filter>

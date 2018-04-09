@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "ZoneCenter.h"
+#include "XWorld/XLuaGlobal.h"
 
 #ifdef _WDEBUG
 #define new DEBUG_NEW
@@ -16,7 +17,7 @@ bool XZoneCenter::OnInit(int argc, char *argv[])
     Guid = XCreateGuid();
     PerformanceStat->SetName("ZoneCenter", AppName.c_str());  
 
-    XLOG_FAILED_JUMP(InitLuaEvn());
+    //XLOG_FAILED_JUMP(InitLuaEvn());
 
 
     result = true;
@@ -28,7 +29,6 @@ Exit0:
 void XZoneCenter::OnStartup()
 {
     ActiveTimeoutWarning = true;
-    GatedLaunch = Config.gated_launch();
 
 #ifdef _WIN32
     OpenStdinThread();
@@ -51,7 +51,7 @@ void XZoneCenter::OnQuitSignal()
 
 void XZoneCenter::OnFinalize()
 {
-    CloseStatLog();
+    //CloseStatLog();
 }
 
 void XZoneCenter::OnActivate()
@@ -108,24 +108,6 @@ void XZoneCenter::OnAllWorldServerExit()
     ZoneStatus = XZoneStatus::WaitDBSave;
 }
 
-bool InitConfig(int argc, char *argv[])
-{
-    bool result = ReadConfigFile("zonecenter.cfg", &ZoneCenter->Config);
-    XLOG_FAILED_JUMP(result);
-
-    if (XTool::FileExist("zonecenter_override.cfg"))
-    {
-        result = ReadConfigFile("zonecenter_override.cfg", &ZoneCenter->Config);
-        XLOG_FAILED_JUMP(result);
-    }
-
-    result = XReadCmdConfig(argc, argv, &ZoneCenter->Config);
-    XLOG_FAILED_JUMP(result);
-
-Exit0:
-    return result;
-}
-
 int main(int argc, char *argv[])
 {
 #ifdef _MSC_VER
@@ -135,10 +117,6 @@ int main(int argc, char *argv[])
     std::string appKey = "ZoneCenter";
     ZoneCenter = new XZoneCenter();
 
-    XLOG_FAILED_JUMP(InitConfig(argc, argv));
-
-    if (!ZoneCenter->Config.app_key().empty())
-        appKey = ZoneCenter->Config.app_key();
 
     ZoneCenter->Init(argc, argv, appKey.c_str(), XGAME_FPS, __DATE__);
     ZoneCenter->Run();

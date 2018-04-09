@@ -15,51 +15,17 @@
 
 XWorldServer *WorldServer = nullptr;
 
-unsigned int GetDomainCreateTime(int domain)
-{
-    return (unsigned int)WorldServer->DomainCreateTime[domain];
-}
-
-static std::string GetPublicIp()
-{
-    XNetworkAdapterInfo* adapterInfo = QueryNetworkAdaptersInfo();
-    std::vector<std::string> internalIp;
-    std::vector<std::string> publicIp;
-    std::string ip;
-
-    for (XNetworkAdapterInfo* adapter = adapterInfo; adapter != NULL; adapter = adapter->pNext)
-    {
-        if (XTool::IsInternalIp(adapter->szAddr))
-            internalIp.push_back(adapter->szAddr);
-        else
-            publicIp.push_back(adapter->szAddr);
-    }
-
-    if (!publicIp.empty())
-        ip = publicIp[0];
-    else if (!internalIp.empty())
-        ip = internalIp[0];
-    else
-        ip = "127.0.0.1";
-
-    FreeNetworkAdaptersQuery(adapterInfo);
-    return ip;
-}
-
 bool XWorldServer::OnInit(int argc, char *argv[])
 {
     Log("WorldServer Compile at: $ $", __DATE__, __TIME__);
 
     bool result = false;
 
-    Log("PublicIP: $", PublicIP);
-    XLOG_FAILED_JUMP(!PublicIP.empty());
-
     PerformanceStat->SetName("WorldServer", AppName.c_str());
 
-    XLOG_FAILED_JUMP(InitLuaEvn());
+    //XLOG_FAILED_JUMP(InitLuaEvn());
 
-    WorldServer->InvokeLua("main");
+    //WorldServer->InvokeLua("main");
     result = true;
 Exit0:
     return result;
@@ -87,7 +53,7 @@ void XWorldServer::OnQuitSignal()
 
 void XWorldServer::OnFinalize()
 {
-    CloseStatLog();
+    //CloseStatLog();
 
     Log("WorldServer Exit.");
 }
@@ -142,29 +108,6 @@ void XWorldServer::Shutdown()
     Exit();
 }
 
-bool InitConfig(int argc, char *argv[])
-{
-    WorldServer->PublicIP = GetPublicIp();
-
-    bool result = ReadConfigFile("worldserver.cfg", &WorldServer->Config);
-    XLOG_FAILED_JUMP(result);
-
-    if (XTool::FileExist("worldserver_override.cfg"))
-    {
-        result = ReadConfigFile("worldserver_override.cfg", &WorldServer->Config);
-        XLOG_FAILED_JUMP(result);
-    }
-
-    result = XReadCmdConfig(argc, argv, &WorldServer->Config);
-    XLOG_FAILED_JUMP(result);
-
-    if (!WorldServer->Config.public_ip().empty())
-        WorldServer->PublicIP = WorldServer->Config.public_ip();
-
-Exit0:
-    return result;
-}
-
 int main(int argc, char *argv[])
 {
 #ifdef _MSC_VER
@@ -173,11 +116,6 @@ int main(int argc, char *argv[])
 
     std::string appKey = "WorldServer";
     WorldServer = new XWorldServer();
-
-    XLOG_FAILED_JUMP(InitConfig(argc, argv));
-
-    if (!WorldServer->Config.app_key().empty())
-        appKey = WorldServer->Config.app_key();
 
     WorldServer->Init(argc, argv, appKey.c_str(), XGAME_FPS, __DATE__);
     WorldServer->Run();

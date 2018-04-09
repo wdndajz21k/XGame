@@ -1,5 +1,4 @@
 #pragma once
-#include "XMeHolder.h"
 
 enum class XWorldStatus
 {
@@ -31,7 +30,6 @@ public:
         f(args...);
     }
 public:
-    worldserver_config Config;
     int WorldServerId = 0;
     int PlayerServerPort = 0;
     std::string Guid;

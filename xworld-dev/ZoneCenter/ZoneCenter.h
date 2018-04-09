@@ -22,7 +22,6 @@ public:
     void OnAllWorldServerExit();
 
 public:
-    zonecenter_config Config;
     std::string Guid;
     time_t LastSave = 0;
     XZoneStatus ZoneStatus = XZoneStatus::Initializing;

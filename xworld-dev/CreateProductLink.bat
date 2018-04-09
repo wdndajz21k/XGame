@@ -1,2 +1,2 @@
 @echo off
-mklink /J Bin ..\xworld_product\
+mklink /J Bin ..\xworld-product\

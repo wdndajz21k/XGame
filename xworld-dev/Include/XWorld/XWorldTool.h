@@ -5,8 +5,6 @@ class XWorldTool
 public:
     static bool PackLuaTable(xrpc_param *p, lua_State *L);
     static void PushLuaParams(lua_State *L, xrpc_param *p);
-    static bool CreateItemData(const std::string& itemStr, xitem_data *itemDataOut);
-    static std::string ItemData2String(const xitem_data& itemData);
     static std::string Protobuf2Json(const google::protobuf::Message *msg);
     static void ReplaceString(std::string & s, const std::string& src, const std::string& dst);
     static int GetPid();
