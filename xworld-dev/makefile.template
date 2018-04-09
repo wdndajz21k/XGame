@@ -1,0 +1,103 @@
+#Product = WorldServer
+#Type	= exe
+#Include = ../Include ../Include-Common
+#Source	= *.cpp
+#LibDir	= ../Lib
+#Lib 	= XWorld ModernLua++ CloudAtlas Lua protobuf
+#Define 	=
+ObjDir	= ../Build
+
+ifeq ($(Type),exe)
+	OutDir	= ../Bin
+else
+	OutDir	= ../Lib
+endif
+
+ifndef Config
+	Config = Debug
+endif
+
+ifndef CPU
+	CPU = corei7
+endif
+
+ifeq ($(Config),Debug)
+	DebugFlag = -g -D_DEBUG -pg
+	DebugLinkFlag = -g -pg
+	Postfix = D
+else
+	DebugFlag = -O3 -g -DNDEBUG
+	DebugLinkFlag = -g
+	Postfix =
+endif
+
+CC = gcc
+CXX = g++
+CFLAGS = $(Include:%=-I%) $(Define:%=-D%) $(DebugFlag) -m64 -march=$(CPU) -fPIC
+CXXFLAGS = $(CFLAGS) -Wno-invalid-offsetof -std=c++14
+LINKFLAGS = $(DebugLinkFlag) -fPIC -rdynamic -Wl,-rpath ./ $(LibDir:%=-L%) $(Lib:%=-l%$(Postfix)) -luuid -lrt -lpthread -ldl -m64
+
+ifeq ($(Type),exe)
+	ProductPath = $(OutDir)/$(Product)$(Postfix)
+endif
+
+ifeq ($(Type),so)
+	AfterLink = cp -f $@ $(LibDir)
+	ProductPath = $(OutDir)/lib$(Product)$(Postfix).so
+	LinkCmd = g++ -shared -ldl -fPIC $(LINKFLAGS) -o
+endif
+
+ifeq ($(Type),a)
+	ProductPath = $(OutDir)/lib$(Product)$(Postfix).a
+	LinkCmd = ar cr
+endif
+
+ObjDirPath = $(ObjDir)/$(Product)/$(Config)
+
+SourcePath = $(shell ls $(Source))
+SrcC = $(filter %.c,$(SourcePath))
+SrcCPP = $(filter %.cpp,$(SourcePath))
+SrcCC = $(filter %.cc,$(SourcePath))
+
+Obj = $(SrcC:%.c=%.o) $(SrcCPP:%.cpp=%.o) $(SrcCC:%.cc=%.o)
+
+$(shell mkdir -p $(LibDir) $(OutDir) $(ObjDirPath))
+
+.PHONY: all
+all: start $(ProductPath)
+
+.PHONY: test
+test: start
+
+.PHONY: clean
+clean:
+	rm -rf $(ObjDir)/$(Product)/*
+	rm -rf $(ProductPath)
+
+.PHONY: start
+start:
+	@echo "---> "Build $(Product) $(Config) ... ...
+	@echo CompileC = $(CC) $(CFLAGS)
+	@echo CompileCpp = $(CXX) $(CXXFLAGS)
+	@echo Link = $(LinkCmd)
+
+$(ProductPath): $(Obj:%=$(ObjDirPath)/%)
+	@echo Link $@ ... ...
+ifeq ($(Type),exe)
+	@$(CXX) $^ $(LINKFLAGS) -o $@
+else
+	@$(LinkCmd) $@ $^
+endif
+	$(AfterLink)
+
+$(ObjDirPath)/%.o: %.c
+	@echo gcc $< ... ...
+	@$(CC) $(CFLAGS) -c -o $@ $<
+
+$(ObjDirPath)/%.o: %.cpp
+	@echo g++ $< ... ...
+	@$(CXX) $(CXXFLAGS) -c -o $@ $<
+
+$(ObjDirPath)/%.o: %.cc
+	@echo g++ $< ... ...
+	@$(CXX) $(CXXFLAGS) -c -o $@ $<

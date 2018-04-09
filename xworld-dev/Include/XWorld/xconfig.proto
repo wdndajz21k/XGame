@@ -1,0 +1,51 @@
+syntax = "proto2";
+
+message zonecenter_config
+{
+	optional	int32	ws_mgr_port			= 1;
+	optional	string	db_ip				= 2;
+	optional	int32	db_port				= 3;
+	optional	string	db_name				= 4;
+	optional	int32	player_start_port	= 5;
+	optional	int32	new_role_map		= 6;
+	optional	int32	new_role_x			= 7;
+	optional	int32	new_role_y			= 8;
+	optional	int32	login_port			= 9;
+	optional	string	paysys_ip			= 10;
+	optional	int32	paysys_port			= 11;
+	optional	bool	use_paysys			= 12;
+	optional	string	app_key				= 13;
+	optional	bool	messagehub_enable	= 14;
+	optional	string	messagehub_ip		= 15;
+	optional	int32	messagehub_port		= 16;
+	optional	int32	guard_port			= 17;
+	optional	bool 	new_role_is_fuben	= 18;
+	optional	bool 	open_gm				= 19;
+	optional	bool 	auto_create_domain	= 20;
+	optional	bool 	gated_launch		= 21;
+	optional	string 	db_pass				= 22;
+	optional	bool 	db_bg_save			= 23;
+	optional	bool 	allow_test_login	= 24;
+	optional	string 	default_channel		= 25;
+}
+
+message worldserver_config
+{
+	optional	string	center_ip			= 1;
+	optional	int32	ws_mgr_port			= 2;
+	optional	string	public_ip			= 3;
+	optional	int32	male_template		= 4;
+	optional	int32	female_template		= 5;
+	optional	int32	first_task_id		= 6;
+	optional	string	app_key				= 7;
+	optional 	bool	missile_debug		= 8;
+	optional	int32	guard_port			= 9;
+	optional	bool	debug_log			= 10;
+	optional 	bool	damage_debug		= 11;
+}
+
+message robot_config
+{
+	optional	string	server_ip			= 1;
+	optional	int32	group 				= 2;
+}
